@@ -1,20 +1,21 @@
 import sqlite3 as sq
-from created_bot import bot
+from TOKEN import DATA_BASE
 
 
 def sql_start():
     global base, cur
-    base = sq.connect('Shkarpeton.db')
+    base = sq.connect(DATA_BASE)
     cur = base.cursor()
     if base:
         print('Connection - OK!')
     base.execute("""CREATE TABLE IF NOT EXISTS assortment(img,
-                name TEXT, description TEXT, price TEXT, articul TEXT TEXT PRIMARY KEY);""")
+                name TEXT, description TEXT, price TEXT, articul TEXT PRIMARY KEY, quantity TEXT);""")
+    base.commit()
 
 
-async def sql_add_command(state):
+async def sql_add_items(state):
     async with state.proxy() as data:
-        cur.execute("""INSERT INTO assortment VALUES (?,?,?,?,?);""", tuple(data.values()))
+        cur.execute("""INSERT INTO assortment VALUES (?,?,?,?,?,?);""", tuple(data.values()))
         base.commit()
 
 
@@ -23,8 +24,8 @@ async def sql_add_command(state):
         #await bot.send_photo(message.from_user.id, ret[0], f'{ret[1]}\n Описание: {ret[2]}\n Цена: {ret[3]}')
 
 
-async def add_basket():
-    return cur.execute("""SELECT * FROM assortment""").fetchall()
+#async def add_basket():
+    #return cur.execute("""SELECT * FROM assortment""").fetchall()
 
 
 

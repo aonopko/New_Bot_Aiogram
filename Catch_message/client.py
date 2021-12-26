@@ -24,7 +24,6 @@ async def assortment(message : types.Message):
                                 add(InlineKeyboardButton(f'Додати у кошик', callback_data=f'add {ret[4]}')))
 
 
-
 def register_hendlers(dp : Dispatcher):
     dp.register_message_handler(bot_menu_command, commands=['start', 'help'])
     dp.register_message_handler(delivery, commands=['Доставка'])

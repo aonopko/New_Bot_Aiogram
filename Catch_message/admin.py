@@ -13,10 +13,12 @@ class FSMAdmin(StatesGroup):
     description = State()
     price = State()
     articul = State()
+    quantity = State()
 
 
 async def admin_panel(message: types.Message):
-    await bot.send_message(message.from_user.id, 'АДМІНКА АКТИВОВАНА', reply_markup=admin_kb.kb_admin)
+    await bot.send_message(message.from_user.id, 'АДМІНКА АКТИВОВАНА',
+                           reply_markup=admin_kb.kb_admin)
 
 
 async def load_item(message: types.Message):
@@ -55,15 +57,27 @@ async def load_price(message: types.Message, state: FSMContext):
     await message.reply('Вартість додано')
     await bot.send_message(message.from_user.id, 'Додайте артикул товару')
 
+
 async def load_articul(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['articul'] = str(message.text)
-    await bot.send_message(message.from_user.id, 'Товар додано')
-    await sqlite_db.sql_add_command(state)
+    await FSMAdmin.next()
+    await message.reply('Артикул додано')
+    await bot.send_message(message.from_user.id, "Додайте об'єм товару")
+
+
+async def load_quantity(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['quantity'] = str(message.text)
+    await message.reply('Товар додано')
+    try:
+        await sqlite_db.sql_add_items(state)
+    except:
+        await bot.send_message(message.from_user.id, 'Товар Існує')
     await state.finish()
 
 
-async def log_out(message: types.Message, state:FSMContext):
+async def log_out(message: types.Message, state: FSMContext):
     current_state = await state.get_state()
     if current_state is None:
         return
@@ -80,5 +94,5 @@ def register_handlrs_admin(dp: Dispatcher):
     dp.register_message_handler(load_description, state=FSMAdmin.description)
     dp.register_message_handler(load_price, state=FSMAdmin.price)
     dp.register_message_handler(load_articul, state=FSMAdmin.articul)
-    dp.register_message_handler(log_out, state="*", commands='Вихід')
-    dp.register_message_handler(log_out, Text(equals='Вихід', ignore_case="/"), state="*")
+    dp.register_message_handler(load_quantity, state=FSMAdmin.quantity)
+    dp.register_message_handler(log_out, state="*", commands=['exit'])
