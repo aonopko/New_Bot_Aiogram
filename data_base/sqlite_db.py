@@ -24,8 +24,8 @@ async def sql_add_items(state):
         #await bot.send_photo(message.from_user.id, ret[0], f'{ret[1]}\n Описание: {ret[2]}\n Цена: {ret[3]}')
 
 
-#async def add_basket():
-    #return cur.execute("""SELECT * FROM assortment""").fetchall()
+async def add_basket():
+    return cur.execute("""SELECT * FROM assortment""").fetchall()
 
 
 
