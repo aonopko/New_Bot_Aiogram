@@ -1,21 +1,21 @@
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, message
 from aiogram import types, Dispatcher
+from created_bot import dp
 from created_bot import bot
 
 
+
 inline_markup = InlineKeyboardMarkup()
-men_button = InlineKeyboardButton('Шкарпетки Чоловічі', callback_data='men_button')
-women_button = InlineKeyboardButton('Шкарпетки Жіночі', callback_data='women_button')
-inline_markup.add(men_button, women_button)
+christmas_socks_button = InlineKeyboardButton('Новорічні',
+                                              url='https://www.instagram.com/stories/highlights/17914129988121812/')
+warm_socks_button = InlineKeyboardButton('Теплі',
+                                         url='https://www.instagram.com/stories/highlights/17920125134016005/')
+
+inline_markup.add(christmas_socks_button, warm_socks_button)
 
 
-async def men_button(call: types.callback_query):
-    await bot.answer_callback_query(call.id)
-    await bot.send_message(call.message.chat.id, 'Кнопку нажали')
 
 
-def register_handlers_inline(dp: Dispatcher):
-    @dp.register_message_handler(men_button, lambda c: c.data == 'men_button')
 
 
 

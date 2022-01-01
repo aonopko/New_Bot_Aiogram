@@ -96,3 +96,4 @@ def register_handlrs_admin(dp: Dispatcher):
     dp.register_message_handler(load_articul, state=FSMAdmin.articul)
     dp.register_message_handler(load_quantity, state=FSMAdmin.quantity)
     dp.register_message_handler(log_out, state="*", commands=['exit'])
+
