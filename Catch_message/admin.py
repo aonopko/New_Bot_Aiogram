@@ -1,3 +1,5 @@
+import sqlite3
+from loguru import logger
 from aiogram import types, Dispatcher
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Text
@@ -5,6 +7,9 @@ from aiogram.dispatcher.filters.state import StatesGroup, State
 from Keyboard import admin_kb
 from created_bot import bot
 from data_base import sqlite_db
+
+logger.add('debug.log', format='{time} {level} {message}', level='DEBUG',
+           rotation='10 KB', compression='zip')
 
 
 class FSMAdmin(StatesGroup):
@@ -72,8 +77,9 @@ async def load_quantity(message: types.Message, state: FSMContext):
     await message.reply('Товар додано')
     try:
         await sqlite_db.sql_add_items(state)
-    except:
+    except sqlite3.IntegrityError:
         await bot.send_message(message.from_user.id, 'Товар Існує')
+        logger.warning('Попітка добавить существующий товар')
     await state.finish()
 
 

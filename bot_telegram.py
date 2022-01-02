@@ -1,12 +1,20 @@
 from aiogram.utils import executor
+from aiogram.utils.exceptions import NetworkError
+from aiohttp import ClientConnectorError
 from created_bot import dp
+from loguru import logger
 from Catch_message import admin, client, other_part
 from data_base import sqlite_db
 
 
-async def on_startup(_):
-    print('Бот вышел онлайн')
+logger.add('debug.log', format='{time} {level} {message}', level='DEBUG',
+           rotation='10 KB', compression='zip')
+
+
+async def on_startup(args):
+    logger.info('Бот вышел онлайн')
     sqlite_db.sql_start()
+    logger.info('БД подключена')
 
 
 client.register_hendlers(dp)

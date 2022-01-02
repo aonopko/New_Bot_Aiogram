@@ -1,5 +1,4 @@
 import sqlite3 as sq
-from aiogram import types,Dispatcher
 from TOKEN import DATA_BASE
 from created_bot import bot
 
@@ -9,8 +8,6 @@ def sql_start():
     global base, cur
     base = sq.connect(DATA_BASE)
     cur = base.cursor()
-    if base:
-        print('Connection - OK!')
     base.execute("""CREATE TABLE IF NOT EXISTS assortment(img,
                 name TEXT, description TEXT, price TEXT, 
                 articul TEXT PRIMARY KEY, quantity TEXT);""")

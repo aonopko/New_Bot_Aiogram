@@ -1,8 +1,8 @@
 @echo off
 
-call %~dp0Bot_Shop_AIogram\venv\Scripts\activate
+call %~dp0New_Bot_Aiogram\venv\Scripts\activate
 
-cd %~dp0Bot_Shkarpeton
+cd %~dp0New_Bot_Aiogram
 
 python bot_telegram.py
 
