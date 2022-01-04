@@ -17,8 +17,8 @@ class FSMAdmin(StatesGroup):
     name = State()
     description = State()
     price = State()
-    articul = State()
     quantity = State()
+    articul = State()
 
 
 async def admin_panel(message: types.Message):
@@ -60,20 +60,20 @@ async def load_price(message: types.Message, state: FSMContext):
         data['price'] = str(message.text)
     await FSMAdmin.next()
     await message.reply('Вартість додано')
-    await bot.send_message(message.from_user.id, 'Додайте артикул товару')
-
-
-async def load_articul(message: types.Message, state: FSMContext):
-    async with state.proxy() as data:
-        data['articul'] = str(message.text)
-    await FSMAdmin.next()
-    await message.reply('Артикул додано')
     await bot.send_message(message.from_user.id, "Додайте об'єм товару")
 
 
 async def load_quantity(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['quantity'] = str(message.text)
+    await FSMAdmin.next()
+    await message.reply('Артикул додано')
+    await bot.send_message(message.from_user.id, "Додайте артикул товару")
+
+
+async def load_articul(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        data['articul'] = str(message.text)
     await message.reply('Товар додано')
     try:
         await sqlite_db.sql_add_items(state)

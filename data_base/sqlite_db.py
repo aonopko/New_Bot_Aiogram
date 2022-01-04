@@ -10,7 +10,7 @@ def sql_start():
     cur = base.cursor()
     base.execute("""CREATE TABLE IF NOT EXISTS assortment(img,
                 name TEXT, description TEXT, price TEXT, 
-                articul TEXT PRIMARY KEY, quantity TEXT);""")
+                quantity TEXT, articul TEXT PRIMARY KEY);""")
     base.commit()
 
 
@@ -22,7 +22,9 @@ async def sql_add_items(state):
 
 async def get_all_assortment(message):
     for ret in cur.execute("""SELECT * FROM assortment""").fetchall():
-        await bot.send_photo(message.from_user.id, ret[0], f'{ret[1]}\n Описание: {ret[2]}\n Цена: {ret[3]}')
+        await bot.send_photo(message.from_user.id, ret[0],
+                             f'{ret[1]}\n Описание: {ret[2]}\n Цена: {ret[3]}\n')
+
 
 
 
