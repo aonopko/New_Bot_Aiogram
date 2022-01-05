@@ -1,9 +1,11 @@
 import sqlite3
-from loguru import logger
+
 from aiogram import types, Dispatcher
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher.filters.state import StatesGroup, State
+from loguru import logger
+
 from Keyboard import admin_kb
 from created_bot import bot
 from data_base import sqlite_db
@@ -39,7 +41,7 @@ async def load_photo(message: types.Message, state: FSMContext):
     await bot.send_message(message.from_user.id, 'Додайте назву товару')
 
 
-async def load_name(message: types.Message, state:FSMContext):
+async def load_name(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['name'] = message.text
     await FSMAdmin.next()
@@ -47,7 +49,7 @@ async def load_name(message: types.Message, state:FSMContext):
     await bot.send_message(message.from_user.id, 'Додайте опис товару')
 
 
-async def load_description(message: types.Message, state:FSMContext):
+async def load_description(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['description'] = message.text
     await FSMAdmin.next()
@@ -102,4 +104,3 @@ def register_handlrs_admin(dp: Dispatcher):
     dp.register_message_handler(load_articul, state=FSMAdmin.articul)
     dp.register_message_handler(load_quantity, state=FSMAdmin.quantity)
     dp.register_message_handler(log_out, state="*", commands=['exit'])
-

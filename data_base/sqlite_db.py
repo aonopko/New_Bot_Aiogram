@@ -1,7 +1,7 @@
 import sqlite3 as sq
+
 from TOKEN import DATA_BASE
 from created_bot import bot
-
 
 
 def sql_start():
@@ -24,17 +24,3 @@ async def get_all_assortment(message):
     for ret in cur.execute("""SELECT * FROM assortment""").fetchall():
         await bot.send_photo(message.from_user.id, ret[0],
                              f'{ret[1]}\n Описание: {ret[2]}\n Цена: {ret[3]}\n')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
