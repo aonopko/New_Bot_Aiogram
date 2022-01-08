@@ -59,18 +59,28 @@ async def load_description(message: types.Message, state: FSMContext):
 
 async def load_price(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        data['price'] = str(message.text)
-    await FSMAdmin.next()
-    await message.reply('Вартість додано')
-    await bot.send_message(message.from_user.id, "Додайте об'єм товару")
+        try:
+            data['price'] = float(message.text)
+        except ValueError:
+            await message.reply('\U0001f6AB  ' + 'Ввели не коректне значення\n')
+            await bot.send_message(message.from_user.id, '\U0000261D  ' + 'Потрібно ввести значення у форматі 00.0')
+        else:
+            await FSMAdmin.next()
+            await message.reply('Вартість додано')
+            await bot.send_message(message.from_user.id, "Додайте об'єм товару")
 
 
 async def load_quantity(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        data['quantity'] = str(message.text)
-    await FSMAdmin.next()
-    await message.reply('Артикул додано')
-    await bot.send_message(message.from_user.id, "Додайте артикул товару")
+        try:
+            data['quantity'] = int(message.text)
+        except ValueError:
+            await message.reply('\U0001f6AB  ' + 'Ввели не коректне значення\n')
+            await bot.send_message(message.from_user.id, '\U0000261D  ' + 'Потрібно ввести значення у форматі 00')
+        else:
+            await FSMAdmin.next()
+            await message.reply("Об'єм додано")
+            await bot.send_message(message.from_user.id, "Додайте артикул товару")
 
 
 async def load_articul(message: types.Message, state: FSMContext):
@@ -94,7 +104,7 @@ async def log_out(message: types.Message, state: FSMContext):
 
 
 def register_handlrs_admin(dp: Dispatcher):
-    dp.register_message_handler(admin_panel, commands=['moderator'])
+    dp.register_message_handler(admin_panel, commands=['moderator'], state=None)
     dp.register_message_handler(load_item, commands=['Завантажити товар'])
     dp.register_message_handler(load_item, Text(equals=['Завантажити товар'], ignore_case="/"))
     dp.register_message_handler(load_photo, content_types=['photo'], state=FSMAdmin.photo)
@@ -103,4 +113,5 @@ def register_handlrs_admin(dp: Dispatcher):
     dp.register_message_handler(load_price, state=FSMAdmin.price)
     dp.register_message_handler(load_articul, state=FSMAdmin.articul)
     dp.register_message_handler(load_quantity, state=FSMAdmin.quantity)
-    dp.register_message_handler(log_out, state="*", commands=['exit'])
+    dp.register_message_handler(log_out, state="*", commands='exit')
+    dp.register_message_handler(log_out, Text(equals='exit', ignore_case=True), state="*")

@@ -9,7 +9,7 @@ logger.add('debug.log', format='{time} {level} {message}', level='DEBUG',
            rotation='10 KB', compression='zip')
 
 
-async def on_startup(*args):
+async def on_startup(_):
     logger.info('Бот вышел онлайн')
     sqlite_db.sql_start()
     logger.info('БД подключена')
