@@ -86,12 +86,13 @@ async def load_quantity(message: types.Message, state: FSMContext):
 async def load_articul(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['articul'] = str(message.text)
-    await message.reply('Товар додано')
     try:
         await sqlite_db.sql_add_items(state)
     except sqlite3.IntegrityError:
-        await bot.send_message(message.from_user.id, 'Товар Існує')
+        await bot.send_message(message.from_user.id, '\U0001f6AB  '+' УВАГА!!! Товар Існує')
         logger.warning('Попітка добавить существующий товар')
+    else:
+        await message.reply('Товар додано')
     await state.finish()
 
 
