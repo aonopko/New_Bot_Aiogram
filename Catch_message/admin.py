@@ -63,7 +63,7 @@ async def load_price(message: types.Message, state: FSMContext):
             data['price'] = float(message.text)
         except ValueError:
             await message.reply('\U0001f6AB  ' + 'Ввели не коректне значення\n')
-            await bot.send_message(message.from_user.id, '\U0000261D  ' + 'Потрібно ввести значення у форматі 00.0')
+            await bot.send_message(message.from_user.id, '\U0000261D  ' + 'Потрібно ввести число')
         else:
             await FSMAdmin.next()
             await message.reply('Вартість додано')
@@ -76,7 +76,7 @@ async def load_quantity(message: types.Message, state: FSMContext):
             data['quantity'] = int(message.text)
         except ValueError:
             await message.reply('\U0001f6AB  ' + 'Ввели не коректне значення\n')
-            await bot.send_message(message.from_user.id, '\U0000261D  ' + 'Потрібно ввести значення у форматі 00')
+            await bot.send_message(message.from_user.id, '\U0000261D  ' + 'Потрібно ввести число')
         else:
             await FSMAdmin.next()
             await message.reply("Об'єм додано")
@@ -90,7 +90,7 @@ async def load_articul(message: types.Message, state: FSMContext):
         await sqlite_db.sql_add_items(state)
     except sqlite3.IntegrityError:
         await bot.send_message(message.from_user.id, '\U0001f6AB  '+' УВАГА!!! Товар Існує')
-        logger.warning('Попітка добавить существующий товар')
+        logger.warning('Спроба добавити існуючий товар')
     else:
         await message.reply('Товар додано')
     await state.finish()
